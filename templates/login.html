@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biometric Access</title>
+    <style>
+        body { 
+            background-color: #0d1117; 
+            color: #58a6ff; 
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container { 
+            background-color: #161b22; 
+            padding: 40px; 
+            border: 2px solid #30363d; 
+            border-radius: 15px; 
+            text-align: center;
+            width: 350px;
+            box-shadow: 0 0 20px rgba(88, 166, 255, 0.2);
+        }
+
+        h1 { margin-bottom: 5px; text-transform: uppercase; letter-spacing: 2px; }
+        p { color: #8b949e; font-size: 12px; margin-bottom: 30px; }
+
+        input { 
+            background-color: #0d1117; 
+            color: white; 
+            border: 1px solid #30363d; 
+            padding: 12px; 
+            width: 100%; 
+            margin-bottom: 15px; 
+            border-radius: 6px;
+            box-sizing: border-box; /* Fixes width issues */
+            text-align: center;
+        }
+
+        /* --- FINGERPRINT SCANNER STYLE --- */
+        .fingerprint-btn {
+            position: relative;
+            background-color: #238636;
+            color: white;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            overflow: hidden; /* Keeps the laser inside */
+            transition: 0.3s;
+        }
+
+        .fingerprint-btn:hover {
+            background-color: #2ea043;
+            box-shadow: 0 0 15px #2ea043;
+        }
+
+        /* The Laser Beam */
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: #afffba;
+            box-shadow: 0 0 10px #afffba;
+            opacity: 0; /* Hidden by default */
+        }
+
+        /* Animation class (added by Javascript) */
+        .scanning .scan-line {
+            opacity: 1;
+            animation: scanMove 1.5s linear infinite;
+        }
+
+        @keyframes scanMove {
+            0% { top: 0; }
+            50% { top: 100%; }
+            100% { top: 0; }
+        }
+
+        .error { color: #ff7b72; margin-bottom: 15px; font-size: 14px; }
+        a { color: #58a6ff; text-decoration: none; font-size: 12px; display: block; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🧬 Biometric ID</h1>
+        <p>SECURE BANKING TERMINAL</p>
+
+        {% if error %}
+            <div class="error">❌ {{ error }}</div>
+        {% endif %}
+
+        <form id="loginForm" action="/login" method="POST">
+            <input type="text" name="username" placeholder="IDENTITY (Username)" required>
+            <input type="password" name="password" placeholder="PASSCODE" required>
+
+            <button type="button" class="fingerprint-btn" onclick="startScan()">
+                <div class="scan-line"></div>
+                👆 TOUCH ID LOGIN
+            </button>
+        </form>
+
+        <a href="/forgot">LOST ACCESS KEY?</a>
+    </div>
+
+    <script>
+        function startScan() {
+            var btn = document.querySelector('.fingerprint-btn');
+            var form = document.getElementById('loginForm');
+
+            // 1. Change text and start laser
+            btn.innerHTML = '<div class="scan-line"></div> 🔍 SCANNING...';
+            btn.classList.add('scanning');
+
+            // 2. Wait 2 seconds (Simulation) then submit
+            setTimeout(function() {
+                btn.innerHTML = '✅ ACCESS GRANTED';
+                form.submit(); // Send data to Python
+            }, 2000);
+        }
+    </script>
+
+</body>
+</html>

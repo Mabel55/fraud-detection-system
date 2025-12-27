@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Database</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .container { width: 80%; max-width: 800px; } /* Make it wider */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #2d3748; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        tr:hover { background-color: #ddd; }
+        .blocked { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div style="position: absolute; top: 20px; right: 20px;">
+        <a href="/">
+            <button style="background-color: #3182ce; width: auto; padding: 10px 20px;">Back to Home 🏠</button>
+        </a>
+        <a href="/logout">
+            <button style="background-color: #e53e3e; width: auto; padding: 10px 20px;">Log Out 🚪</button>
+        </a>
+    </div>
+
+    <div class="container">
+        <h1>📂 Blacklisted Transactions</h1>
+        <p>Live Database of Detected Fraud</p>
+
+        {% if transactions %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Amount</th>
+                    <th>Location</th>
+                    <th>Type</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in transactions %}
+                <tr>
+                    <td>₦{{ row[0] }}</td>
+                    <td>{{ row[1] }}</td>
+                    <td>{{ row[2] }}</td>
+                    <td>{{ row[3] }}:00</td>
+                    <td class="blocked">{{ row[4] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p>No fraud recorded yet. Good news! ✅</p>
+        {% endif %}
+        
+    </div>
+
+</body>
+</html>

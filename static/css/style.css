@@ -1,0 +1,97 @@
+/* 1. Global Reset */
+body {
+    background-color: #f0f2f5; /* Light Grey Background */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* 2. The Main Card */
+.container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1); /* Soft shadow */
+    width: 400px;
+    text-align: center;
+}
+
+/* 3. Typography */
+h1 {
+    color: #1a365d; /* Dark Bank Blue */
+    margin-bottom: 10px;
+}
+
+p {
+    color: #718096;
+    margin-bottom: 30px;
+}
+
+/* 4. Form Inputs */
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    box-sizing: border-box; /* Ensures padding doesn't break width */
+    font-size: 16px;
+}
+
+/* 5. The Button */
+button {
+    background-color: #3182ce; /* Trust Blue */
+    color: white;
+    padding: 14px 20px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 18px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #2b6cb0; /* Darker blue on hover */
+}
+
+/* 6. Result Box Styling */
+.result-box {
+    margin-top: 25px;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.safe {
+    background-color: #c6f6d5;
+    color: #22543d;
+    border: 1px solid #9ae6b4;
+}
+
+.fraud {
+    background-color: #fed7d7;
+    color: #822727;
+    border: 1px solid #feb2b2;
+    animation: shake 0.5s; /* Shake animation for danger */
+}
+
+/* 7. Shake Animation for Fraud */
+@keyframes shake {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}

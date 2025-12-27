@@ -1,32 +1,121 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bank Fraud Detector</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 50px; background-color: #f4f4f9; }
-        form { background: white; max-width: 400px; margin: auto; padding: 30px; border-radius: 10px; box-shadow: 0px 0px 10px #ccc; }
-        input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
-        button { background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
-        button:hover { background-color: #218838; }
+        /* LOADER STYLE */
+        #loader {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            z-index: 9999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3182ce;
+            border-radius: 50%;
+            width: 60px; height: 60px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loading-text { font-size: 18px; font-weight: bold; color: #2d3748; }
     </style>
 </head>
 <body>
 
-    <h1>🕵️‍♂️ Fraud Detection System</h1>
-    <p>Enter transaction details to check for fraud.</p>
+    <div id="loader">
+        <div class="spinner"></div>
+        <div class="loading-text" id="status-text">Connecting to Secure Server...</div>
+    </div>
 
-    <form method="POST">
-        <label>Transaction Amount (₦):</label><br>
-        <input type="number" name="amount" placeholder="e.g. 50000" required>
-        <br><br>
+    <div style="position: absolute; top: 20px; right: 20px;">
+        <a href="/database">
+            <button style="background-color: #2d3748; width: auto; padding: 10px 20px; margin-right: 10px;">View Database 📂</button>
+        </a>
+        <a href="/logout">
+            <button style="background-color: #e53e3e; width: auto; padding: 10px 20px;">Log Out 🚪</button>
+        </a>
+    </div>
 
-        <label>Location:</label><br>
-        <input type="text" name="location" placeholder="e.g. Lagos" required>
-        <br><br>
+    <div class="container">
+        <h1>🔒 SecureBank AI</h1>
+        <p>Advanced Fraud Detection System</p>
 
-        <button type="submit">Check Transaction</button>
-    </form>
+        <form action="/" method="POST" onsubmit="startProcessing(event)">
+            <label style="float: left; font-weight: bold; font-size: 14px;">Transaction Type</label>
+            <select name="trans_type" required>
+                <option value="Transfer">Normal Transfer</option>
+                <option value="Reversal">Reversal Request (Refund)</option>
+            </select>
+
+            <label style="float: left; font-weight: bold; font-size: 14px;">Amount (₦)</label>
+            <input type="number" name="amount" placeholder="e.g. 5000" required>
+
+            <label style="float: left; font-weight: bold; font-size: 14px;">Account Type</label>
+            <select name="account_type" required>
+                <option value="Student">Student (Savings)</option>
+                <option value="Corporate">Corporate (Business)</option>
+            </select>
+
+            <label style="float: left; font-weight: bold; font-size: 14px;">Location</label>
+            <input type="text" name="location" placeholder="e.g. Lagos" required>
+
+            <label style="float: left; font-weight: bold; font-size: 14px;">Time (0-23)</label>
+            <input type="number" name="time" placeholder="e.g. 14" required min="0" max="23">
+
+            <button type="submit">Check Transaction</button>
+        </form>
+
+        {% if prediction_text %}
+        <div id="result-box" class="result-box {% if 'FRAUD' in prediction_text or 'SCAM' in prediction_text %}fraud{% else %}safe{% endif %}">
+            {{ prediction_text }}
+        </div>
+        {% endif %}
+        
+    </div>
+
+    <script>
+        // 1. Loading Animation Logic
+        function startProcessing(event) {
+            event.preventDefault(); 
+            const loader = document.getElementById('loader');
+            const text = document.getElementById('status-text');
+            loader.style.display = 'flex';
+            setTimeout(() => { text.innerText = "🔍 Analyzing Transaction Patterns..."; }, 1000);
+            setTimeout(() => { text.innerText = "📡 Checking Global Blacklist..."; }, 2500);
+            setTimeout(() => { event.target.submit(); }, 3500);
+        }
+
+        // 2. Audio Logic (Runs automatically when result appears)
+        window.onload = function() {
+            var resultBox = document.getElementById('result-box');
+            if (resultBox) {
+                var text = resultBox.innerText;
+                
+                // AUDIO FILES (Hosted online for ease)
+                var safeSound = new Audio('https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg'); // Fun Ding
+                var fraudSound = new Audio('https://actions.google.com/sounds/v1/alarms/spaceship_alarm.ogg'); // Siren
+
+                if (text.includes("FRAUD") || text.includes("SCAM")) {
+                    fraudSound.play();
+                } else {
+                    safeSound.play();
+                }
+            }
+        };
+    </script>
 
 </body>
 </html>
-
